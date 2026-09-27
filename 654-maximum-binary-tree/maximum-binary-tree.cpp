@@ -11,38 +11,35 @@
  */
 class Solution {
 public:
-
-    int maximum(vector<int>& nums, int l, int r){
-        int maxIdx = -1;
-        int g = INT_MIN;
-
-        for(int i = l; i <= r; i++){
-            if(nums[i] > g){
-                maxIdx = i;
-                g = nums[i];
+    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+        stack<TreeNode*> st; // Using a vector as a stack for easy access
+        
+        for (int num : nums) {
+            TreeNode* curr = new TreeNode(num);
+            
+            // 1. Pop all smaller nodes; the last popped node becomes curr's left child
+            while (!st.empty() && st.top()->val < num) {
+                curr->left = st.top();
+                st.pop();
             }
+            
+            // 2. If there is a larger node left in the stack, curr becomes its right child
+            if (!st.empty()) {
+                st.top()->right = curr;
+            }
+            
+            // Push current node onto the stack
+            st.push(curr);
         }
-        return maxIdx;
-    }
-
-    TreeNode* helper(vector<int>& nums, int l, int r){
-
-        if(l > r){
-            return NULL;
-        }
-
-        int maxIdx = maximum(nums, l, r);
-
-        TreeNode* root = new TreeNode(nums[maxIdx]);
-
-        root->left = helper(nums, l, maxIdx-1);
-        root->right = helper(nums, maxIdx+1, r);
-
+        
+        // The bottom-most element of the stack (first element) will be the global maximum/root
+        // Keep popping until you reach the bottom-most element
+        TreeNode* root = nullptr;
+            while (!st.empty()) {
+                root = st.top();
+                st.pop();
+            }
         return root;
 
-    }
-    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
-
-        return helper(nums, 0, nums.size()-1);
     }
 };
