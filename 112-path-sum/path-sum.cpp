@@ -1,31 +1,48 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
 class Solution {
 public:
-    bool helper(TreeNode* root, int targetSum, int pathSum) {
-        // Base case: Leaf node check
-        if (root->left == nullptr && root->right == nullptr) {
-            return (pathSum + root->val == targetSum);
+    void helper(TreeNode* root, int pathSum, vector<int>& allPathsSum){
+        if(root->left == NULL && root->right == NULL){
+            allPathsSum.push_back(pathSum + root->val);
+            return;
         }
 
-        bool leftFound = false;
-        bool rightFound = false;
-
-        // Traverse left subtree
-        if (root->left) {
-            leftFound = helper(root->left, targetSum, pathSum + root->val);
+        if(root->left){
+            helper(root->left,pathSum + root->val, allPathsSum);
         }
 
-        // Traverse right subtree (Only if left didn't already find it)
-        if (root->right && !leftFound) {
-            rightFound = helper(root->right, targetSum, pathSum + root->val);
+        if(root->right){
+            helper(root->right,pathSum + root->val, allPathsSum);
         }
-        
-        return leftFound || rightFound;
+
+        return;
     }
-
     bool hasPathSum(TreeNode* root, int targetSum) {
-        if (root == nullptr) {
+        vector<int> allPathsSum;
+        
+        if(root == NULL){
             return false;
         }
-        return helper(root, targetSum, 0);
+
+        helper(root,0, allPathsSum);
+
+        for(int pathSum : allPathsSum){
+            if(pathSum == targetSum){
+                return true;
+            }
+        }
+
+        return false;
     }
+
 };
