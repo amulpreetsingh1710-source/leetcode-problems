@@ -1,45 +1,24 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
 class Solution {
 public:
-
-    void preorder(TreeNode* root, vector<TreeNode*>& n){
-        if(root == NULL){
-            return;
-        }
-
-        n.push_back(root);
-        preorder(root->left,n); 
-        preorder(root->right,n);
-
-
-    }
-    
     void flatten(TreeNode* root) {
-
-        if(root == NULL){
-            return;
+        TreeNode* curr = root;
+        while (curr != nullptr) {
+            if (curr->left != nullptr) {
+                // Find the rightmost node in the left subtree
+                TreeNode* prev = curr->left;
+                while (prev->right != nullptr) {
+                    prev = prev->right;
+                }
+                
+                // Rewire: connect rightmost node to current's right child
+                prev->right = curr->right;
+                
+                // Move the left subtree to the right side
+                curr->right = curr->left;
+                curr->left = nullptr;
+            }
+            // Move to the next node on the right path
+            curr = curr->right;
         }
-        
-        vector<TreeNode*> n;
-        preorder(root,n);
-
-        for(int i = 1; i< n.size(); i++){
-            root->left = NULL;
-            root->right = n[i];
-            root = root->right;
-        }
-        root->left = NULL;
-        root->right = NULL;
-        return;
     }
 };
