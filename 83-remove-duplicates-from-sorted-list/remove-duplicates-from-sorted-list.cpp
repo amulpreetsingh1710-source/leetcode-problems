@@ -17,7 +17,7 @@ public:
         }
         
         ListNode* curr = head;
-        ListNode* prev = NULL;
+        
 
         while(curr && curr->next ){
             if(curr->val == curr->next->val){
