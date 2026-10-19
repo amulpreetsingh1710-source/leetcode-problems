@@ -11,27 +11,31 @@
  */
 class Solution {
 public:
-    int helper(TreeNode* root, TreeNode* minRange, TreeNode* maxRange,int minDis){
+
+    TreeNode* prev = NULL;
+    int minDiffInBST(TreeNode* root) {
 
         if(root == NULL){
-            return minDis;
+            return INT_MAX;
         }
-        if(maxRange != NULL){
-            minDis = min(minDis, maxRange->val - root->val);
+
+        int ans = INT_MAX;
+        if(root->left){
+            int minLeft = minDiffInBST(root->left);
+            ans = min(ans,minLeft);
         }
-        if(minRange != NULL){
-            minDis = min(minDis, root->val - minRange->val);
-        }
+
         
+        if(prev != NULL){
+            ans = min(ans,root->val - prev->val);
+        }
+        prev = root;
+        
+        if(root->right){
+            int minRight = minDiffInBST(root->right);
+            ans = min(ans,minRight);
+        }
 
-        int minLeft = helper(root->left, minRange, root, minDis);
-        int minRight = helper(root->right, root, maxRange, minDis);
-
-        return min(minLeft,minRight);
-    }
-    int minDiffInBST(TreeNode* root) {
-        int minDis = INT_MAX;
-
-        return helper(root, NULL, NULL, minDis);
+        return ans;
     }
 };
