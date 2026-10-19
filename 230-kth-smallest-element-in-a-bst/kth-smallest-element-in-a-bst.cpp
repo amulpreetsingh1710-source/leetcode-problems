@@ -12,24 +12,28 @@
 class Solution {
 public:
 
-    void helper(vector<int>& inorder, TreeNode* root){
-
-        if(root == NULL){
-            return;
-        }
-
-        helper(inorder, root->left);
-        inorder.push_back(root->val);
-        helper(inorder, root->right);
-
-    }
-
     int kthSmallest(TreeNode* root, int k) {
-
-        vector<int> inorder;
-        helper(inorder, root);
-
-        return inorder[k-1];
+        stack<TreeNode*> st;
+        TreeNode* curr = root;
         
+        while(curr != NULL || !st.empty()){
+
+            while(curr != NULL){
+                st.push(curr);
+                curr = curr->left;
+            }
+
+            curr = st.top();
+            st.pop();
+
+            k--;
+
+            if(k == 0){
+                return curr->val;
+            }
+            
+            curr = curr->right;
+        }
+        return -1;
     }
 };
