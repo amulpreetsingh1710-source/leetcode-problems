@@ -12,28 +12,35 @@
 class Solution {
 public:
 
+    int prevOrder = 0;
+
     int kthSmallest(TreeNode* root, int k) {
-        stack<TreeNode*> st;
-        TreeNode* curr = root;
-        
-        while(curr != NULL || !st.empty()){
-
-            while(curr != NULL){
-                st.push(curr);
-                curr = curr->left;
-            }
-
-            curr = st.top();
-            st.pop();
-
-            k--;
-
-            if(k == 0){
-                return curr->val;
-            }
-            
-            curr = curr->right;
+        if(root == NULL){
+            return -1;
         }
+
+        if(root->left){
+            int left = kthSmallest(root->left, k);
+
+            if(left != -1){
+                return left;
+            }
+        }
+
+        if(prevOrder + 1 == k){
+            return root->val;
+        }
+        prevOrder++;
+
+        if(root->right){
+            int right = kthSmallest(root->right, k);
+
+            if(right != -1){
+                return right;
+            }
+
+        }
+
         return -1;
     }
 };
