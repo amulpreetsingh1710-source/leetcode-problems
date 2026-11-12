@@ -1,43 +1,24 @@
 class Solution {
 public:
-
-    void helper(int r, int c, vector<vector<char>> &grid){
-
-        grid[r][c] = '0';
-
-        if( c+1 < grid[0].size() && grid[r][c+1] == '1'){
-            helper(r, c+1, grid);
-        }
-        if( c-1 >= 0 && grid[r][c-1] == '1'){
-            helper(r, c-1, grid);
-        }
-        if( r+1 < grid.size() && grid[r+1][c] == '1'){
-            helper(r+1, c, grid);
-        }
-        if( r-1 >= 0 && grid[r-1][c] == '1'){
-            helper(r-1, c, grid);
-        }
-
+    void dfs(vector<vector<char>>& grid, int i, int j) {
+        if(i < 0 || j < 0 || i >= grid.size() || j >= grid[0].size() || grid[i][j] == '0')
+        return;
+        grid[i][j] = '0';
+        dfs(grid, i+1, j);
+        dfs(grid, i-1, j);
+        dfs(grid, i, j+1);
+        dfs(grid, i, j-1);   
     }
-    int numIslands(vector<vector<char>>& grid) {
-
-        int rows = grid.size();
-        int cols = grid[0].size();
-
-        vector<vector<bool>> vis(rows, vector<bool>(cols,false));
-
-        int numOfIsl = 0;
-        for(int i = 0; i< rows; i++){
-
-            for(int j = 0; j< cols; j++){
-
+    int numIslands(vector<vector<char>>& grid){
+        int count = 0;
+        for(int i = 0; i < grid.size(); i++){
+            for(int j = 0; j < grid[0].size(); j++){
                 if(grid[i][j] == '1'){
-                    helper(i, j, grid);
-                    numOfIsl++;
-                }
+                count++;
+                dfs(grid, i, j);
             }
         }
-
-        return numOfIsl;
+    }
+      return count;
     }
 };
