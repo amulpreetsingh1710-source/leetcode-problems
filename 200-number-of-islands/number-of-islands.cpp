@@ -1,21 +1,21 @@
 class Solution {
 public:
 
-    void helper(int r, int c, vector<vector<bool>> &vis,vector<vector<char>> &grid){
+    void helper(int r, int c, vector<vector<char>> &grid){
 
-        vis[r][c] = true;
+        grid[r][c] = '0';
 
-        if( c+1 < grid[0].size() && grid[r][c+1] == '1' && vis[r][c+1] == false){
-            helper(r, c+1, vis, grid);
+        if( c+1 < grid[0].size() && grid[r][c+1] == '1'){
+            helper(r, c+1, grid);
         }
-        if( c-1 >= 0 && grid[r][c-1] == '1' && vis[r][c-1] == false){
-            helper(r, c-1, vis, grid);
+        if( c-1 >= 0 && grid[r][c-1] == '1'){
+            helper(r, c-1, grid);
         }
-        if( r+1 < grid.size() && grid[r+1][c] == '1' && vis[r+1][c] == false){
-            helper(r+1, c, vis, grid);
+        if( r+1 < grid.size() && grid[r+1][c] == '1'){
+            helper(r+1, c, grid);
         }
-        if( r-1 >= 0 && grid[r-1][c] == '1' && vis[r-1][c] == false){
-            helper(r-1, c, vis, grid);
+        if( r-1 >= 0 && grid[r-1][c] == '1'){
+            helper(r-1, c, grid);
         }
 
     }
@@ -31,8 +31,8 @@ public:
 
             for(int j = 0; j< cols; j++){
 
-                if(grid[i][j] == '1' && vis[i][j] == false){
-                    helper(i, j, vis, grid);
+                if(grid[i][j] == '1'){
+                    helper(i, j, grid);
                     numOfIsl++;
                 }
             }
